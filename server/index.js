@@ -2,15 +2,19 @@ import express from "express";
 import bodyParser from "body-parser";
 // import mongoose from "mongoose";
 import cors from "cors";
-//import dotenv from "dotenv";  //u havent downloaded this,
-//import multer from "multer"; //u havent downloaded this,
-import helmet from "helmet";
+import dotenv from "dotenv"; //to load .env file into process.env
+import multer from "multer"; //file upload middleware
+import helmet from "helmet"; //security headers in express
+import morgan from "morgan"; //HTTP request logger (but i think i dont need this) (for debugging)
 import path from "path";
 import { fileURLToPath } from "url";
+import conn from "./db/conn.js";
 
-// const express = require("express");
+dotenv.config();
+console.log("DB_USER", process.env.DB_USER);
+console.log("DB_USER", process.env.DB_PASS);
+console.log("Connecting to:", process.env.DB_HOST);
 
-// const cors = require("cors");
 const app = express();
 
 app.use(
@@ -25,10 +29,6 @@ app.use(
 app.get("/api", (req, res) => {
   res.send({ message: "API is working" });
 });
-
-// app.get("/api", (req, res) => {
-//   res.json({ users: ["user1", "user2", "user3"] });
-// });
 
 app.listen(5433, "0.0.0.0", () => {
   console.log("Server started at: 5433");
