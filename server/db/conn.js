@@ -8,19 +8,29 @@ const conn = mysql2.createConnection({
   database: process.env.DB_DATABASE,
 });
 
+conn.connect((err) => {
+  if (err) {
+    console.log("ERROR: " + err.message);
+    return;
+  }
+  console.log("Connection established");
+});
+
 let dataPool = {};
 
-// dataPool.allUsers = () => {
-//   return new Promise((resolve, reject) => {
-//     conn.query("SELECT * FROM user", (err, res) => {
-//       if (err) {
-//         reject(err);
-//       } else {
-//         resolve(res);
-//       }
-//     });
-//   });
-// };
+dataPool.authUser = (email) => {
+  return new Promise((resolve, reject) => {
+    conn.query("SELECT * FROM user WHERE email = ?", [email], (err, res) => {
+      if (err) {
+        reject(err);
+      } else if (res.length > 0) {
+        resolve(res[0]);
+      } else {
+        resolve(null);
+      }
+    });
+  });
+};
 
 dataPool.allUsers = () => {
   console.log("🔍 allUsers() called");
@@ -37,9 +47,9 @@ dataPool.allUsers = () => {
   });
 };
 
-dataPool.oneUser = (id) => {
+dataPool.oneUser = (user_id) => {
   return new Promise((resolve, reject) => {
-    conn.query("SELECT * FROM user WHERE id = ?", id, (err, res) => {
+    conn.query("SELECT * FROM user WHERE user_id = ?", user_id, (err, res) => {
       if (err) {
         reject(err);
       } else {
@@ -48,13 +58,5 @@ dataPool.oneUser = (id) => {
     });
   });
 };
-
-conn.connect((err) => {
-  if (err) {
-    console.log("ERROR: " + err.message);
-    return;
-  }
-  console.log("Connection established");
-});
 
 export default dataPool;
