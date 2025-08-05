@@ -8,7 +8,8 @@ import helmet from "helmet"; //security headers in express
 import morgan from "morgan"; //HTTP request logger (but i think i dont need this) (for debugging)
 import path from "path";
 import { fileURLToPath } from "url";
-import conn from "./db/conn.js";
+import dataPool from "./db/conn.js";
+import user from "./routes/user.js"; // Importing user routes
 
 dotenv.config();
 console.log("DB_USER", process.env.DB_USER);
@@ -19,7 +20,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://88.200.63.148:3076", // Change to your frontend IP/port
+    origin: "http://localhost:3067", // Change to your frontend IP/port
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
     allowedHeaders: "Content-Type,Authorization",
@@ -30,6 +31,11 @@ app.get("/api", (req, res) => {
   res.send({ message: "API is working" });
 });
 
-app.listen(5433, "0.0.0.0", () => {
-  console.log("Server started at: 5433");
+//routes
+app.use("/api/user", user);
+
+const port = 5433 || process.env.PORT;
+
+app.listen(process.env.PORT || port, () => {
+  console.log(`Server started at: ${port || process.env.PORT}`);
 });
