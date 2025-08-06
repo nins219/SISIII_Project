@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from "react";
-
-//u might need to chnage proxy in json file if u are running on local mashine
+import Login from "./pages/Login"; // adjust the path if needed
 
 function App() {
   const [backendData, setBackendData] = useState([{}]);
 
   useEffect(() => {
-    fetch("http://88.200.63.148:5000/api")
+    fetch("http://localhost:5433/api")
       .then((response) => response.json())
       .then((data) => {
         setBackendData(data);
       });
   }, []); //this [] means we only do it when the site is rendered only once at the beginning
 
-  return <div></div>;
+  return <Login />;
 }
 
 export default App;

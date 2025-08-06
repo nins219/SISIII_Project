@@ -10,6 +10,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import dataPool from "./db/conn.js";
 import user from "./routes/user.js"; // Importing user routes
+// import auth from "./routes/auth.js"; // Importing auth routes
 
 dotenv.config();
 console.log("DB_USER", process.env.DB_USER);
@@ -17,6 +18,8 @@ console.log("DB_USER", process.env.DB_PASS);
 console.log("Connecting to:", process.env.DB_HOST);
 
 const app = express();
+
+app.use(express.json());
 
 app.use(
   cors({
@@ -31,8 +34,15 @@ app.get("/api", (req, res) => {
   res.send({ message: "API is working" });
 });
 
+// auth.get("/", (req, res) => {
+//   res.send({ message: "Auth API is working" });
+// });
+
 //routes
 app.use("/api/user", user);
+
+//FOR PICTURE UPLOADS
+// app.use("/uploads", express.static("uploads"));
 
 const port = 5433 || process.env.PORT;
 
