@@ -1,5 +1,9 @@
 import express from "express";
 import db from "../db/conn.js"; // Assuming you have a db module for database operations
+import multer from "multer";
+
+const upload = multer();
+
 const user = express.Router();
 // GET /api/user/1 - fetch user with id 1 for testing
 user.get("/1", async (req, res) => {
@@ -11,6 +15,50 @@ user.get("/1", async (req, res) => {
     res.json(user[0] || user);
   } catch (err) {
     console.error("Error fetching user with id 1:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+//picture upload that I will setup later when on server
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, "uploads/"); // Ensure this directory exists
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, `${Date.now()}-${file.originalname}`);
+//   }
+// });
+// const upload = multer({ storage });
+
+user.post("/register", upload.none(), async (req, res) => {
+  try {
+    const {
+      name,
+      surname,
+      email,
+      password,
+      city,
+      language,
+      bio,
+      account_type = "unverified",
+    } = req.body;
+    const userData = {
+      name,
+      surname,
+      email,
+      password,
+      city,
+      language,
+      bio,
+      account_type,
+    };
+    const result = await db.registerUser(userData);
+    res.status(201).json({
+      message: "User registered successfully",
+      userId: result.insertId,
+    });
+  } catch (err) {
+    console.error("Registration error:", err.message);
     res.status(500).json({ error: "Internal server error" });
   }
 });

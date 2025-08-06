@@ -40,7 +40,9 @@ app.get("/api", (req, res) => {
 
 //routes
 app.use("/api/user", user);
-// app.use("/api/auth", auth); // Use the auth routes
+
+//FOR PICTURE UPLOADS
+// app.use("/uploads", express.static("uploads"));
 
 const port = 5433 || process.env.PORT;
 
