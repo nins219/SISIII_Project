@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from "react";
 import Login from "./pages/Login"; // adjust the path if needed
+import Register from "./pages/Register"; // adjust the path if needed
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Switch,
+} from "react-router-dom";
 
 function App() {
-  const [backendData, setBackendData] = useState([{}]);
-
-  useEffect(() => {
-    fetch("http://localhost:5433/api")
-      .then((response) => response.json())
-      .then((data) => {
-        setBackendData(data);
-      });
-  }, []); //this [] means we only do it when the site is rendered only once at the beginning
-
-  return <Login />;
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;

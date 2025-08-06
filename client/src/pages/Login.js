@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -8,13 +9,15 @@ const Login = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setSuccess("");
-    const endpoint = isRegister
-      ? "http://localhost:5433/api/user/register"
-      : "http://localhost:5433/api/user/login";
+    const endpoint =
+      // isRegister ? "http://localhost:5433/api/user/register" :
+      "http://localhost:5433/api/user/login";
 
     try {
       const res = await fetch(endpoint, {
@@ -72,86 +75,19 @@ const Login = () => {
               />
             </div>
             <button type="submit" className="btn btn-primary w-100 mb-3">
-              {isRegister ? "Register" : "Sign In"}
+              Sign In
             </button>
           </form>
 
           <button
-            onClick={() => setIsRegister((prev) => !prev)}
+            onClick={() => navigate("/register")}
             className="btn btn-light w-100"
           >
-            {isRegister
-              ? "Already have an account? Sign In"
-              : "Don't have an account? Register"}
+            Don't have an account? Register
           </button>
         </div>
       </div>
     </div>
-    // <div
-    //   style={{
-    //     maxWidth: 350,
-    //     margin: "40px auto",
-    //     padding: 20,
-    //     border: "1px solid #ccc",
-    //     borderRadius: 8,
-    //   }}
-    // >
-    //   <h2 style={{ textAlign: "center" }}>
-    //     {isRegister ? "Register" : "Sign In"}
-    //   </h2>
-    //   {error && (
-    //     <div
-    //       style={{ color: "#b00020", marginBottom: 10, textAlign: "center" }}
-    //     >
-    //       {error}
-    //     </div>
-    //   )}
-    //   {success && (
-    //     <div
-    //       style={{ color: "#388e3c", marginBottom: 10, textAlign: "center" }}
-    //     >
-    //       {success}
-    //     </div>
-    //   )}
-    //   <form onSubmit={handleSubmit}>
-    //     <input
-    //       type="email"
-    //       placeholder="Email"
-    //       value={email}
-    //       onChange={(e) => setEmail(e.target.value)}
-    //       required
-    //       style={{ width: "100%", marginBottom: 10, padding: 8 }}
-    //     />
-    //     <input
-    //       type="password"
-    //       placeholder="Password"
-    //       value={password}
-    //       onChange={(e) => setPassword(e.target.value)}
-    //       required
-    //       style={{ width: "100%", marginBottom: 10, padding: 8 }}
-    //     />
-    //     <button
-    //       type="submit"
-    //       style={{ width: "100%", padding: 10, marginBottom: 10 }}
-    //     >
-    //       {isRegister ? "Register" : "Sign In"}
-    //     </button>
-    //   </form>
-    //   <button
-    //     onClick={() => setIsRegister((prev) => !prev)}
-    //     style={{
-    //       width: "100%",
-    //       padding: 8,
-    //       background: "#eee",
-    //       border: "none",
-    //       borderRadius: 4,
-    //     }}
-    //   >
-    //     {isRegister
-    //       ? "Already have an account? Sign In"
-    //       : "Don't have an account? Register"}
-    //   </button>
-    // </div>
   );
 };
 
