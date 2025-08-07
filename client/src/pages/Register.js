@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [formData, setFormData] = React.useState({
@@ -10,10 +11,12 @@ const Register = () => {
     city: "",
     language: "",
     bio: "",
-    // picture: "",
+    picture: null,
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -29,11 +32,12 @@ const Register = () => {
 
     const data = new FormData();
     for (let key in formData) {
-      data.append(key, formData[key]);
+      if (key === "picture" && formData.picture) {
+        data.append("picture", formData.picture, formData.picture.name);
+      } else if (key !== "picture") {
+        data.append(key, formData[key]);
+      }
     }
-    // if (picture) {
-    //   data.append("picture", picture); //so check if its like this, cuz the picture is a text field and it will be placed locally on the server
-    // }
     try {
       const res = await fetch("http://localhost:5433/api/user/register", {
         method: "POST",
@@ -52,8 +56,10 @@ const Register = () => {
           city: "",
           language: "",
           bio: "",
-          // picture: "",
+          picture: null,
         });
+        // setUncaughtExceptionCaptureCallback(null);
+        navigate("/profile");
         // redirect here
       } else {
         setError(result.error || "Registration failed");
@@ -155,18 +161,26 @@ const Register = () => {
               ></textarea>
             </div>
             {/* UPLOAD PICTURE HERE/ */}
-            {/* <div className="mb-3">
-                <input
-                  type="file"
-                  className="form-control"
-                  accept="image/*"
-                  // required
-                />
-              </div> */}
+            <div className="mb-3">
+              <input
+                type="file"
+                className="form-control"
+                accept="image/*"
+                onChange={(e) =>
+                  setFormData({ ...formData, picture: e.target.files[0] })
+                }
+              />
+            </div>
             <button type="submit" className="btn btn-primary w-100 mb-3">
               Register
             </button>
           </form>
+          <button
+            onClick={() => navigate("/login")}
+            className="btn btn-light w-100"
+          >
+            Already have an account? Sign In
+          </button>
         </div>
       </div>
     </div>

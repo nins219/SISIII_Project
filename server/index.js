@@ -12,14 +12,37 @@ import dataPool from "./db/conn.js";
 import user from "./routes/user.js"; // Importing user routes
 // import auth from "./routes/auth.js"; // Importing auth routes
 
+const app = express();
+
+app.use(express.json());
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+app.use("/uploads", express.static(path.join(__dirname, "../uploads"))); // Serve static files from the uploads directory
+
+// file storage
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "../uploads"); // inside my project root
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`);
+  },
+});
+const upload = multer({ storage });
+
+// app.use(
+//   "/uploads",
+//   express.static(
+//     path.join(path.dirname(fileURLToPath(import.meta.url)), "../uploads")
+//   )
+// );
+
 dotenv.config();
 console.log("DB_USER", process.env.DB_USER);
 console.log("DB_USER", process.env.DB_PASS);
 console.log("Connecting to:", process.env.DB_HOST);
-
-const app = express();
-
-app.use(express.json());
 
 app.use(
   cors({

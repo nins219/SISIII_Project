@@ -28,6 +28,7 @@ const Login = () => {
       const data = await res.json();
       if (res.ok) {
         setSuccess("Success!");
+        navigate("/profile");
         // maybe store token, redirect, etc.
       } else {
         setError(data.error || "An error occurred");

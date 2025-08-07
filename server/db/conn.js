@@ -33,6 +33,7 @@ dataPool.registerUser = (userData) => {
       userData.bio || null, // Default to null if bio is not provided
       userData.account_type || "unverified", // Default to 'unverified' if not provided
     ];
+    //idk if this will work
     conn.query(query, values, (err, result) => {
       if (err) {
         reject(err);
@@ -40,6 +41,7 @@ dataPool.registerUser = (userData) => {
         resolve(result);
       }
     });
+    // idk if this will work
   });
 };
 
