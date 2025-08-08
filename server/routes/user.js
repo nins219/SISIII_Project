@@ -73,7 +73,7 @@ user.post("/register", upload.single("picture"), async (req, res) => {
   }
 });
 
-user.post("/", async (req, res) => {
+user.post("/login", async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   try {
