@@ -9,8 +9,9 @@ import morgan from "morgan"; //HTTP request logger (but i think i dont need this
 import path from "path";
 import { fileURLToPath } from "url";
 import dataPool from "./db/conn.js";
-import user from "./routes/user.js"; // Importing user routes
-// import auth from "./routes/auth.js"; // Importing auth routes
+import user from "./routes/user.js";
+import post from "./routes/post.js";
+// import auth from "./routes/auth.js";
 
 const app = express();
 
@@ -63,6 +64,7 @@ app.get("/api", (req, res) => {
 
 //routes
 app.use("/api/user", user);
+app.use("/api/post", post);
 
 //FOR PICTURE UPLOADS
 // app.use("/uploads", express.static("uploads"));

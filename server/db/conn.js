@@ -86,4 +86,28 @@ dataPool.oneUser = (user_id) => {
   });
 };
 
+dataPool.allPosts = () => {
+  return new Promise((resolve, reject) => {
+    conn.query("SELECT * FROM post", (err, res) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(res);
+      }
+    });
+  });
+};
+
+dataPool.allActivities = () => {
+  return new Promise((resolve, reject) => {
+    conn.query("SELECT * FROM activity_type", (err, res) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(res);
+      }
+    });
+  });
+};
+
 export default dataPool;
