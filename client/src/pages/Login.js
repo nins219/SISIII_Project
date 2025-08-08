@@ -26,10 +26,12 @@ const Login = () => {
         body: JSON.stringify({ email, password }),
       });
       const data = await res.json();
+
       if (res.ok) {
+        localStorage.setItem("user", JSON.stringify(data.user));
         setSuccess("Success!");
-        navigate("/profile");
-        // maybe store token, redirect, etc.
+        navigate("/profile/${data.user.id}");
+        // maybe store token, redirect
       } else {
         setError(data.error || "An error occurred");
       }

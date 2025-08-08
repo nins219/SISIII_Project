@@ -73,19 +73,28 @@ user.post("/register", upload.single("picture"), async (req, res) => {
   }
 });
 
-user.post("/login", async (req, res) => {
+user.post("/", async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   try {
     const user = await db.authUser(email);
     if (!user) return res.status(401).json({ error: "User not found" });
 
-    // Compare plain password (for now, no hashing)
+    // Compare plain password (for now no hashing)
     if (password !== user.password_hash) {
       return res.status(401).json({ error: "Wrong password" });
     }
 
-    res.json({ message: "Login successful" });
+    // res.json({
+    //   message: "Login successful",
+    //   user_id: user.id,
+    //   name: user.name,
+    //   account_type: user.account_type,
+    //   picture: user.picture || null,
+    // });
+    const { password_hash, ...safeUser } = user; // Exclude password from response
+    // cookie session here
+    res.json({ message: "Login successful", user: safeUser });
   } catch (err) {
     console.error("Login error:", err.message);
     res.status(500).json({ error: "Internal server error" });

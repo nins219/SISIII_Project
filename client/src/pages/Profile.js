@@ -1,4 +1,8 @@
 import Navbar from "../components/Navbar";
+import { useParams } from "react-router-dom";
+
+const { id } = useParams();
+
 const Profile = () => {
   return (
     <div>
