@@ -29,6 +29,7 @@ const Login = () => {
 
       if (res.ok) {
         localStorage.setItem("user", JSON.stringify(data.user));
+        localStorage.setItem("userId", data.user.id);
         setSuccess("Success!");
         navigate("/profile/${data.user.id}");
         // maybe store token, redirect

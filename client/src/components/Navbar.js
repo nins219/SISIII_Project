@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
+  const userId = localStorage.getItem("userId");
   return (
     <div>
       <ul className="nav nav-tabs">

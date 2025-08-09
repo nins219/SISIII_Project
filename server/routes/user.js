@@ -18,15 +18,29 @@ const upload = multer({ storage });
 const user = express.Router();
 
 // GET /api/user/1 - fetch user with id 1 for testing
-user.get("/1", async (req, res) => {
+// user.get("/1", async (req, res) => {
+//   try {
+//     const user = await db.oneUser(1);
+//     if (!user || user.length === 0) {
+//       return res.status(404).json({ error: "User not found" });
+//     }
+//     res.json(user[0] || user);
+//   } catch (err) {
+//     console.error("Error fetching user with id 1:", err);
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// });
+
+user.get("/id", async (req, res) => {
   try {
-    const user = await db.oneUser(1);
+    const user = await db.oneUser(req.query.id);
     if (!user || user.length === 0) {
       return res.status(404).json({ error: "User not found" });
     }
-    res.json(user[0] || user);
+    const { password_hash, email, created_at, ...safeUser } = user[0]; // Exclude sensitive data
+    res.json(safeUser);
   } catch (err) {
-    console.error("Error fetching user with id 1:", err);
+    console.error("Error fetching user by ID:", err);
     res.status(500).json({ error: "Internal server error" });
   }
 });
