@@ -1,15 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import Home from "./pages/Home";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Navigate,
-  Route,
-  Switch,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
   // implement this later on, bellow in comment is the profile route example of how to implement
@@ -24,7 +18,7 @@ function App() {
           path="/profile"
           element={isAuth ? <Profile /> : <Navigate to="/"></Navigate>}
         /> */}
-        <Route path="/profile/:id" element={<Profile />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/home" element={<Home />} />
       </Routes>
     </Router>
