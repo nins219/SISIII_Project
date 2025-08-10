@@ -110,5 +110,33 @@ dataPool.allActivities = () => {
     });
   });
 };
+dataPool.createPost = (postData) => {
+  return new Promise((resolve, reject) => {
+    const query =
+      "INSERT INTO post (user_id, title, description, activity_type, location, picture, no_of_people, date_time, is_paid_event, ticket_price, people_joint, status, visibility_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    const values = [
+      postData.user_id,
+      postData.title,
+      postData.description,
+      postData.activity_type,
+      postData.location,
+      postData.picture,
+      postData.no_of_people,
+      postData.date_time,
+      postData.is_paid_event,
+      postData.ticket_price,
+      postData.people_joint || 0,
+      postData.status || "open",
+      postData.visibility_type || "public",
+    ];
+    conn.query(query, values, (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+};
 
 export default dataPool;

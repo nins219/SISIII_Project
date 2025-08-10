@@ -42,6 +42,23 @@ const Profile = () => {
       <div className="d-flex justify-content-center my-5">
         <User user={user} />
       </div>
+      <div
+        className="d-flex justify-content-center mb-5"
+        style={{ gap: "10px" }}
+      >
+        <button
+          className="btn btn-primary"
+          onClick={() => navigate("/createpost")}
+        >
+          Add Post
+        </button>
+        <button
+          className="btn btn-secondary"
+          onClick={() => navigate("/editprofile")}
+        >
+          Edit Profile
+        </button>
+      </div>
     </div>
   );
 };

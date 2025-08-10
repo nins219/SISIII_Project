@@ -1,7 +1,8 @@
 import express from "express";
-import db from "../db/conn.js"; // Assuming you have a db module for database operations␊
+import db from "../db/conn.js";
 import multer from "multer";
 import crypto from "crypto";
+import sessions from "../sessions.js";
 
 // const upload = multer();
 
@@ -16,7 +17,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-const sessions = {};
+// const sessions = {};
 const user = express.Router();
 
 user.use((req, res, next) => {
