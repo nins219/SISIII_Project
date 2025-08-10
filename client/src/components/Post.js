@@ -7,7 +7,7 @@ const Post = ({ post }) => {
         <div className="d-flex justify-content-between align-items-center mb-2">
           <h5 className="card-title mb-0">{post.title}</h5>
           <small className="text-muted">
-            {new Date(post.date).toLocaleDateString()}
+            {new Date(post.created_at).toLocaleDateString()}
           </small>
         </div>
 
@@ -21,7 +21,9 @@ const Post = ({ post }) => {
           />
         )}
         <div className="mt-3 text-muted text-end">
-          <small>By {post.author}</small>
+          <small>
+            By {post.name} {post.surname}
+          </small>
         </div>
       </div>
     </div>
