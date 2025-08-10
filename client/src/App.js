@@ -6,9 +6,6 @@ import Home from "./pages/Home";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
-  // implement this later on, bellow in comment is the profile route example of how to implement
-  const isAuth = Boolean(localStorage.getItem("token"));
-
   return (
     <Router>
       <Routes>
