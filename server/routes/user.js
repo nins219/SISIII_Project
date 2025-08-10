@@ -1,6 +1,7 @@
 import express from "express";
-import db from "../db/conn.js"; // Assuming you have a db module for database operations
+import db from "../db/conn.js"; // Assuming you have a db module for database operations␊
 import multer from "multer";
+import crypto from "crypto";
 
 // const upload = multer();
 
@@ -15,20 +16,19 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
+const sessions = {};
 const user = express.Router();
 
-// GET /api/user/1 - fetch user with id 1 for testing
-user.get("/1", async (req, res) => {
-  try {
-    const user = await db.oneUser(1);
-    if (!user || user.length === 0) {
-      return res.status(404).json({ error: "User not found" });
+user.use((req, res, next) => {
+  const cookie = req.headers.cookie;
+  if (cookie) {
+    const match = cookie.match(/sessionId=([^;]+)/);
+    if (match && sessions[match[1]]) {
+      req.session = sessions[match[1]];
+      req.sessionId = match[1];
     }
-    res.json(user[0] || user);
-  } catch (err) {
-    console.error("Error fetching user with id 1:", err);
-    res.status(500).json({ error: "Internal server error" });
   }
+  next();
 });
 
 user.post("/register", upload.single("picture"), async (req, res) => {
@@ -80,24 +80,30 @@ user.post("/login", async (req, res) => {
     const user = await db.authUser(email);
     if (!user) return res.status(401).json({ error: "User not found" });
 
-    // Compare plain password (for now no hashing)
     if (password !== user.password_hash) {
       return res.status(401).json({ error: "Wrong password" });
     }
 
-    // res.json({
-    //   message: "Login successful",
-    //   user_id: user.id,
-    //   name: user.name,
-    //   account_type: user.account_type,
-    //   picture: user.picture || null,
-    // });
-    const { password_hash, ...safeUser } = user; // Exclude password from response
-    // cookie session here
+    const { password_hash, user_id, ...safeUser } = user; // Exclude password and id from response
+    const sessionId = crypto.randomBytes(16).toString("hex");
+    sessions[sessionId] = { user_id, ...safeUser };
+    res.cookie("sessionId", sessionId, {
+      httpOnly: true,
+      sameSite: "lax",
+    });
     res.json({ message: "Login successful", user: safeUser });
   } catch (err) {
     console.error("Login error:", err.message);
     res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+user.get("/me", (req, res) => {
+  if (req.session) {
+    const { user_id, ...safeUser } = req.session;
+    res.json(safeUser);
+  } else {
+    res.status(401).json({ error: "Not authenticated" });
   }
 });
 

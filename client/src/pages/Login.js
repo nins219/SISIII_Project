@@ -23,15 +23,14 @@ const Login = () => {
       const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ email, password }),
       });
       const data = await res.json();
 
       if (res.ok) {
-        localStorage.setItem("user", JSON.stringify(data.user));
         setSuccess("Success!");
-        navigate("/profile/${data.user.id}");
-        // maybe store token, redirect
+        navigate("/profile");
       } else {
         setError(data.error || "An error occurred");
       }

@@ -88,7 +88,10 @@ dataPool.oneUser = (user_id) => {
 
 dataPool.allPosts = () => {
   return new Promise((resolve, reject) => {
-    conn.query("SELECT * FROM post", (err, res) => {
+    const query =
+      "SELECT p.*, u.name, u.surname FROM post p JOIN user u ON p.user_id = u.user_id";
+
+    conn.query(query, (err, res) => {
       if (err) {
         reject(err);
       } else {

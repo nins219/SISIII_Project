@@ -12,19 +12,12 @@ import {
 } from "react-router-dom";
 
 function App() {
-  // implement this later on, bellow in comment is the profile route example of how to implement
-  const isAuth = Boolean(localStorage.getItem("token"));
-
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        {/* <Route
-          path="/profile"
-          element={isAuth ? <Profile /> : <Navigate to="/"></Navigate>}
-        /> */}
-        <Route path="/profile/:id" element={<Profile />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/home" element={<Home />} />
       </Routes>
     </Router>

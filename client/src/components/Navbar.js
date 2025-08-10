@@ -10,7 +10,7 @@ const Navbar = () => {
           </Link>
         </li>
         <li className="nav-item">
-          <Link className="nav-link" to="/profile/${id}">
+          <Link className="nav-link" to="/profile">
             Profile
           </Link>
         </li>
