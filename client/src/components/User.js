@@ -1,0 +1,63 @@
+import React from "react";
+
+const User = ({ user }) => {
+  return (
+    <div
+      className="card shadow-sm"
+      style={{ width: "500px", minHeight: "250px" }}
+    >
+      <div
+        className="card-body d-flex"
+        style={{ gap: "20px" }} // optional spacing between halves
+      >
+        {user.picture && (
+          <div style={{ flex: "1" }}>
+            <img
+              src={user.picture}
+              alt="Profile"
+              className="img-fluid rounded"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                maxHeight: "250px",
+              }}
+            />
+          </div>
+        )}
+        <div
+          style={{
+            flex: "1",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+          }}
+        >
+          <h5 className="card-title">
+            {user.name} {user.surname}
+          </h5>
+          <p className="card-text mb-1">
+            <strong>Email:</strong> {user.email}
+          </p>
+          {user.city && (
+            <p className="card-text mb-1">
+              <strong>City:</strong> {user.city}
+            </p>
+          )}
+          {user.language && (
+            <p className="card-text mb-1">
+              <strong>Language:</strong> {user.language}
+            </p>
+          )}
+          {user.bio && (
+            <p className="card-text">
+              <strong>Bio:</strong> {user.bio}
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default User;

@@ -107,4 +107,18 @@ user.get("/me", (req, res) => {
   }
 });
 
+user.get("/:id", async (req, res) => {
+  try {
+    const result = await db.oneUser(req.params.id);
+    if (result.length === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    const { password_hash, ...safeUser } = result[0];
+    res.json(safeUser);
+  } catch (err) {
+    console.error("Fetch user error:", err.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 export default user;

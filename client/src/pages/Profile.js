@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
+import User from "../components/User";
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -38,7 +39,9 @@ const Profile = () => {
   return (
     <div>
       <Navbar />
-      <h1>Welcome, {user.name}</h1>
+      <div className="d-flex justify-content-center my-5">
+        <User user={user} />
+      </div>
     </div>
   );
 };
