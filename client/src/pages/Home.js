@@ -27,7 +27,7 @@ const Home = () => {
     const results = posts.filter(
       (post) =>
         post.title.toLowerCase().includes(t) ||
-        post.content.toLowerCase().includes(t)
+        post.description.toLowerCase().includes(t)
     );
     setFiltered(results);
   };

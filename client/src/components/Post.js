@@ -11,7 +11,7 @@ const Post = ({ post }) => {
           </small>
         </div>
 
-        <p className="card-text">{post.content}</p>
+        <p className="card-text">{post.description}</p>
         {post.picture && (
           <img
             src={post.picture}
