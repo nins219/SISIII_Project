@@ -13,6 +13,7 @@ import user from "./routes/user.js";
 import post from "./routes/post.js";
 import request from "./routes/request.js";
 // import auth from "./routes/auth.js";
+import review from "./routes/review.js";
 
 const app = express();
 
@@ -67,6 +68,7 @@ app.get("/api", (req, res) => {
 app.use("/api/user", user);
 app.use("/api/post", post);
 app.use("/api/request", request);
+app.use("/api/review", review);
 
 //FOR PICTURE UPLOADS
 // app.use("/uploads", express.static("uploads"));

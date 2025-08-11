@@ -227,4 +227,46 @@ dataPool.updateRequestStatus = (request_id, status) => {
   });
 };
 
+dataPool.addReview = ({ from_user_id, to_post_id, rating, comment }) => {
+  return new Promise((resolve, reject) => {
+    const query =
+      "INSERT INTO review (from_user_id, to_post_id, rating, comment, created_at) VALUES (?, ?, ?, ?, NOW())";
+    conn.query(
+      query,
+      [from_user_id, to_post_id, rating, comment],
+      (err, result) => {
+        if (err) reject(err);
+        else resolve(result);
+      }
+    );
+  });
+};
+
+dataPool.getAverageRating = (user_id) => {
+  return new Promise((resolve, reject) => {
+    const query =
+      "SELECT AVG(r.rating) AS average FROM review r JOIN post p ON r.to_post_id = p.post_id WHERE p.user_id = ?";
+    conn.query(query, [user_id], (err, res) => {
+      if (err) reject(err);
+      else resolve(res[0]?.average || null);
+    });
+  });
+};
+
+dataPool.pendingReviewsForUser = (user_id) => {
+  return new Promise((resolve, reject) => {
+    const query = `
+      SELECT r.id AS request_id, p.post_id, p.title, p.date_time, u.user_id AS host_id, u.name, u.surname
+      FROM request r
+      JOIN post p ON r.post_id = p.post_id
+      JOIN user u ON p.user_id = u.user_id
+      LEFT JOIN review rv ON rv.to_post_id = p.post_id AND rv.from_user_id = r.user_id
+      WHERE r.user_id = ? AND r.status = 'accepted' AND p.date_time < NOW() AND rv.id IS NULL
+    `;
+    conn.query(query, [user_id], (err, res) => {
+      if (err) reject(err);
+      else resolve(res);
+    });
+  });
+};
 export default dataPool;

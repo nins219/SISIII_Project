@@ -26,6 +26,20 @@ const Profile = () => {
       }
     };
 
+    const fetchRating = async () => {
+      try {
+        const res = await fetch("http://localhost:5433/api/review/average/me", {
+          credentials: "include",
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setUser((prev) => ({ ...(prev || {}), averageRating: data.average }));
+        }
+      } catch (err) {
+        console.error("Failed to fetch rating", err);
+      }
+    };
+
     const fetchPosts = async () => {
       try {
         const res = await fetch("http://localhost:5433/api/post/mine", {
@@ -42,6 +56,7 @@ const Profile = () => {
 
     fetchUser();
     fetchPosts();
+    fetchRating();
   }, [navigate]);
 
   if (!user) {

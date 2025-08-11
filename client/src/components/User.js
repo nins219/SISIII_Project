@@ -4,12 +4,9 @@ const User = ({ user }) => {
   return (
     <div
       className="card shadow-sm"
-      style={{ width: "500px", minHeight: "250px" }}
+      style={{ width: "500px", minHeight: "250px", position: "relative" }}
     >
-      <div
-        className="card-body d-flex"
-        style={{ gap: "20px" }} // optional spacing between halves
-      >
+      <div className="card-body d-flex" style={{ gap: "20px" }}>
         {user.picture && (
           <div style={{ flex: "1" }}>
             <img
@@ -56,6 +53,11 @@ const User = ({ user }) => {
           )}
         </div>
       </div>
+      {user.averageRating !== undefined && (
+        <div style={{ position: "absolute", bottom: "10px", left: "10px" }}>
+          <strong>Rating:</strong> {Number(user.averageRating).toFixed(1)}
+        </div>
+      )}
     </div>
   );
 };
