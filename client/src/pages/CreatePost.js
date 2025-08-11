@@ -56,17 +56,19 @@ const CreatePost = () => {
     setSuccess("");
 
     const data = new FormData();
-    for (let key in formData) {
-      if (key === "picture" && formData.picture) {
-        data.append("picture", formData.picture, formData.picture.name);
+    Object.entries(formData).forEach(([key, value]) => {
+      if (key === "picture") {
+        if (value) {
+          data.append("picture", value, value.name);
+        }
       } else if (key === "is_paid_event") {
-        data.append("is_paid_event", formData.is_paid_event ? 1 : 0);
+        data.append("is_paid_event", value ? 1 : 0);
       } else if (key === "ticket_price") {
-        data.append("ticket_price", formData.ticket_price || 0);
-      } else if (key !== "picture") {
-        data.append(key, formData[key]);
+        data.append("ticket_price", value || 0);
+      } else {
+        data.append(key, value);
       }
-    }
+    });
     try {
       const res = await fetch("http://localhost:5433/api/post/create", {
         method: "POST",
@@ -169,7 +171,7 @@ const CreatePost = () => {
                 ></textarea>
               </div>
               <div className="mb-3">
-                <label className="form-label">Activity Type</label>
+                <label className="form-label">Activity</label>
                 <select
                   className="form-select"
                   value={formData.activity_type}
@@ -180,10 +182,7 @@ const CreatePost = () => {
                 >
                   <option value="">Select activity</option>
                   {activities.map((act) => (
-                    <option
-                      key={act.activity_type_id}
-                      value={act.activity_type_id}
-                    >
+                    <option key={act.id_activity} value={act.id_activity}>
                       {act.name}
                     </option>
                   ))}

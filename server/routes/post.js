@@ -61,23 +61,28 @@ post.post("/create", upload.single("picture"), async (req, res) => {
       date_time,
       is_paid_event,
       ticket_price,
-      status = "active",
+      status = "open",
       visibility_type = "public",
     } = req.body;
 
     const picturePath = req.file ? req.file.path : null;
 
+    const formattedDate = date_time
+      ? new Date(date_time).toISOString().slice(0, 19).replace("T", " ")
+      : null;
+
     const postData = {
       user_id: req.session.user_id,
       title,
       description,
-      activity_type,
+      activity_type: activity_type ? parseInt(activity_type, 10) : null,
       location,
       picture: picturePath,
-      no_of_people,
-      date_time,
-      is_paid_event,
-      ticket_price,
+      no_of_people: no_of_people ? parseInt(no_of_people, 10) : null,
+      date_time: formattedDate,
+      is_paid_event: is_paid_event ? 1 : 0,
+      ticket_price: ticket_price ? parseFloat(ticket_price) : 0,
+      people_joint: 0,
       status,
       visibility_type,
     };
@@ -90,6 +95,7 @@ post.post("/create", upload.single("picture"), async (req, res) => {
   } catch (err) {
     console.error("Error creating post:", err);
     res.status(500).json({ error: "Internal server error" });
+    console.log(req.body);
   }
 });
 

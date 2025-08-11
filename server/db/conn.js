@@ -125,7 +125,7 @@ dataPool.createPost = (postData) => {
       postData.date_time,
       postData.is_paid_event,
       postData.ticket_price,
-      postData.people_joint || 0,
+      postData.people_joint ?? 0,
       postData.status || "open",
       postData.visibility_type || "public",
     ];
