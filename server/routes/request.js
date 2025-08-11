@@ -49,4 +49,34 @@ request.post("/create", async (req, res) => {
   }
 });
 
+request.get("/notifications", async (req, res) => {
+  try {
+    if (!req.session) {
+      return res.status(401).json({ error: "Not authenticated" });
+    }
+    const requests = await db.pendingRequestsForHost(req.session.user_id);
+    res.json(requests);
+  } catch (err) {
+    console.error("Error fetching notifications:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Update request status to accept, decline
+request.put("/:id", async (req, res) => {
+  try {
+    if (!req.session) {
+      return res.status(401).json({ error: "Not authenticated" });
+    }
+    const { status } = req.body;
+    if (!["accepted", "declined"].includes(status)) {
+      return res.status(400).json({ error: "Invalid status" });
+    }
+    await db.updateRequestStatus(req.params.id, status);
+    res.json({ status });
+  } catch (err) {
+    console.error("Error updating request status:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
 export default request;
