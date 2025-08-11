@@ -99,6 +99,19 @@ dataPool.allPosts = () => {
   });
 };
 
+dataPool.postByUser = (user_id) => {
+  return new Promise((resolve, reject) => {
+    const query = `SELECT post.*, user.name, user.surname FROM post JOIN user ON post.user_id = user.user_id WHERE post.user_id = ?`;
+    conn.query(query, [user_id], (err, res) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(res);
+      }
+    });
+  });
+};
+
 dataPool.allActivities = () => {
   return new Promise((resolve, reject) => {
     conn.query("SELECT * FROM activity_type", (err, res) => {

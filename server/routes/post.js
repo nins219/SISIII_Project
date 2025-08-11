@@ -47,6 +47,19 @@ post.get("/activities", async (req, res) => {
   }
 });
 
+post.get("/mine", async (req, res) => {
+  try {
+    if (!req.session) {
+      return res.status(401).json({ error: "Not authenticated" });
+    }
+    const posts = await db.postByUser(req.session.user_id);
+    res.json(posts);
+  } catch (err) {
+    console.error("Error fetching user posts:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 post.post("/create", upload.single("picture"), async (req, res) => {
   try {
     if (!req.session) {
