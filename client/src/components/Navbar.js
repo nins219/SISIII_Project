@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 const Navbar = () => {
   const [notifications, setNotifications] = useState([]);
+  const [reviewNotifications, setReviewNotifications] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,7 +23,22 @@ const Navbar = () => {
         console.error("Failed to fetch notifications", err);
       }
     };
+
+    const fetchReviewNotifications = async () => {
+      try {
+        const res = await fetch("http://localhost:5433/api/review/pending", {
+          credentials: "include",
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setReviewNotifications(data);
+        }
+      } catch (err) {
+        console.error("Failed to fetch review notifications", err);
+      }
+    };
     fetchNotifications();
+    fetchReviewNotifications();
   }, []);
 
   const handleAction = async (id, status) => {
@@ -63,13 +79,15 @@ const Navbar = () => {
             href="#"
           >
             Notifications
-            {notifications.length > 0 ? ` (${notifications.length})` : ""}
+            {notifications.length + reviewNotifications.length > 0
+              ? ` (${notifications.length + reviewNotifications.length})`
+              : ""}
           </a>
           <ul
             className="dropdown-menu"
             style={{ maxHeight: "300px", overflowY: "auto" }}
           >
-            {notifications.length === 0 && (
+            {notifications.length === 0 && reviewNotifications.length === 0 && (
               <li>
                 <span className="dropdown-item-text">No notifications</span>
               </li>
@@ -117,6 +135,26 @@ const Navbar = () => {
                     </span>
                   )}
                 </div>
+              </li>
+            ))}
+            {reviewNotifications.length > 0 && (
+              <li>
+                <hr className="dropdown-divider" />
+              </li>
+            )}
+            {reviewNotifications.map((r) => (
+              <li
+                key={`review-${r.post_id}`}
+                className="dropdown-item"
+                style={{ cursor: "pointer" }}
+                onClick={() =>
+                  navigate(`/review/${r.post_id}?hostId=${r.host_id}`)
+                }
+              >
+                <div>{`Rate ${r.name} ${r.surname} for ${r.title}`}</div>
+                <small className="text-muted">
+                  {new Date(r.date_time).toLocaleString()}
+                </small>
               </li>
             ))}
           </ul>

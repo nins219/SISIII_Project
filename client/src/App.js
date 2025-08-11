@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import CreatePost from "./pages/CreatePost";
 import EditProfile from "./pages/EditProfile";
 import RequestNotification from "./pages/RequestNotification";
+import Review from "./pages/Review";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/createpost" element={<CreatePost />} />
         {/* <Route path="/edit-profile" element={<EditProfile />} /> */}
         <Route path="/user/:id" element={<RequestNotification />} />
+        <Route path="/review/:postId" element={<Review />} />
       </Routes>
     </Router>
   );
