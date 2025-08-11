@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
 import User from "../components/User";
+import Post from "../components/Post";
 
 const Profile = () => {
   const [user, setUser] = useState(null);
+  const [posts, setPosts] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,7 +26,22 @@ const Profile = () => {
       }
     };
 
+    const fetchPosts = async () => {
+      try {
+        const res = await fetch("http://localhost:5433/api/post/mine", {
+          credentials: "include",
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setPosts(data);
+        }
+      } catch (err) {
+        console.error("Failed to fetch user posts", err);
+      }
+    };
+
     fetchUser();
+    fetchPosts();
   }, [navigate]);
 
   if (!user) {
@@ -58,6 +75,15 @@ const Profile = () => {
         >
           Edit Profile
         </button>
+      </div>
+      <div className="container mt-4">
+        <div className="row">
+          {posts.map((post) => (
+            <div key={post.id} className="col-md-3 mb-4">
+              <Post post={post} />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
