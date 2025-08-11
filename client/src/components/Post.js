@@ -26,7 +26,7 @@ const Post = ({ post }) => {
 
   const handleRequest = async () => {
     try {
-      const res = await fetch("http://localhost:5433/api/request/toggle", {
+      const res = await fetch("http://localhost:5433/api/request/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -37,7 +37,7 @@ const Post = ({ post }) => {
         setRequested(data.requested);
       }
     } catch (err) {
-      console.error("Failed to toggle request", err);
+      console.error("Failed to send request", err);
     }
   };
 
@@ -67,6 +67,7 @@ const Post = ({ post }) => {
           <button
             className={`btn ${requested ? "btn-secondary" : "btn-primary"}`}
             onClick={handleRequest}
+            disabled={requested}
           >
             {requested ? "Requested" : "Request"}
           </button>
