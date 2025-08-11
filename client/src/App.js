@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import CreatePost from "./pages/CreatePost";
 import EditProfile from "./pages/EditProfile";
+import RequestNotification from "./pages/RequestNotification";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/createpost" element={<CreatePost />} />
         {/* <Route path="/edit-profile" element={<EditProfile />} /> */}
+        <Route path="/user/:id" element={<RequestNotification />} />
       </Routes>
     </Router>
   );
