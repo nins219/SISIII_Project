@@ -77,9 +77,12 @@ const Profile = () => {
         </button>
       </div>
       <div className="container mt-4">
-        <div className="row">
+        <div className="row justify-content-center">
           {posts.map((post) => (
-            <div key={post.id} className="col-md-3 mb-4">
+            <div
+              key={post.id}
+              className="col-md-4 d-flex justify-content-center mb-4"
+            >
               <Post post={post} />
             </div>
           ))}

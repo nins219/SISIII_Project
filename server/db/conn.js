@@ -93,7 +93,11 @@ dataPool.allPosts = () => {
       if (err) {
         reject(err);
       } else {
-        resolve(res);
+        const posts = res.map(({ post_id, ...rest }) => ({
+          id: post_id,
+          ...rest,
+        }));
+        resolve(posts);
       }
     });
   });
@@ -106,7 +110,11 @@ dataPool.postByUser = (user_id) => {
       if (err) {
         reject(err);
       } else {
-        resolve(res);
+        const posts = res.map(({ post_id, ...rest }) => ({
+          id: post_id,
+          ...rest,
+        }));
+        resolve(posts);
       }
     });
   });
@@ -147,6 +155,45 @@ dataPool.createPost = (postData) => {
         reject(err);
       } else {
         resolve(result);
+      }
+    });
+  });
+};
+
+dataPool.checkRequest = (user_id, post_id) => {
+  return new Promise((resolve, reject) => {
+    const query = "SELECT id FROM request WHERE user_id = ? AND post_id = ?";
+    conn.query(query, [user_id, post_id], (err, res) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(res.length > 0 ? res[0] : null);
+      }
+    });
+  });
+};
+
+// Adds a request if one does not already exist for the given user and post.
+// Always resolves to true when the request exists after calling.
+dataPool.addRequest = (user_id, post_id) => {
+  return new Promise((resolve, reject) => {
+    const checkQuery =
+      "SELECT id FROM request WHERE user_id = ? AND post_id = ?";
+    conn.query(checkQuery, [user_id, post_id], (err, res) => {
+      if (err) {
+        return reject(err);
+      }
+      if (res.length > 0) {
+        // Request already exists; nothing to insert
+        resolve(true);
+      } else {
+        const now = new Date().toISOString().slice(0, 19).replace("T", " ");
+        const insertQuery =
+          "INSERT INTO request (user_id, post_id, status, status_updated_at, created_at) VALUES (?, ?, 'pending', ?, ?)";
+        conn.query(insertQuery, [user_id, post_id, now, now], (err2) => {
+          if (err2) reject(err2);
+          else resolve(true);
+        });
       }
     });
   });

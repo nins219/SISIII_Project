@@ -1,6 +1,46 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const Post = ({ post }) => {
+  const [requested, setRequested] = useState(false);
+
+  useEffect(() => {
+    const checkRequest = async () => {
+      try {
+        const res = await fetch(
+          `http://localhost:5433/api/request/status/${post.id}`,
+          {
+            credentials: "include",
+          }
+        );
+        if (res.ok) {
+          const data = await res.json();
+          setRequested(data.requested);
+        }
+      } catch (err) {
+        console.error("Failed to check request status", err);
+      }
+    };
+
+    checkRequest();
+  }, [post.id]);
+
+  const handleRequest = async () => {
+    try {
+      const res = await fetch("http://localhost:5433/api/request/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ postId: post.id }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setRequested(data.requested);
+      }
+    } catch (err) {
+      console.error("Failed to send request", err);
+    }
+  };
+
   return (
     <div className="card mb-4 shadow-sm">
       <div className="card-body">
@@ -20,10 +60,17 @@ const Post = ({ post }) => {
             style={{ maxHeight: "300px", objectFit: "cover", width: "100%" }}
           />
         )}
-        <div className="mt-3 text-muted text-end">
-          <small>
+        <div className="mt-3 d-flex justify-content-between align-items-center">
+          <small className="text-muted">
             By {post.name} {post.surname}
           </small>
+          <button
+            className={`btn ${requested ? "btn-secondary" : "btn-primary"}`}
+            onClick={handleRequest}
+            disabled={requested}
+          >
+            {requested ? "Requested" : "Request"}
+          </button>
         </div>
       </div>
     </div>
