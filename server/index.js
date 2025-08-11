@@ -11,6 +11,7 @@ import { fileURLToPath } from "url";
 import dataPool from "./db/conn.js";
 import user from "./routes/user.js";
 import post from "./routes/post.js";
+import request from "./routes/request.js";
 // import auth from "./routes/auth.js";
 
 const app = express();
@@ -65,6 +66,7 @@ app.get("/api", (req, res) => {
 //routes
 app.use("/api/user", user);
 app.use("/api/post", post);
+app.use("/api/request", request);
 
 //FOR PICTURE UPLOADS
 // app.use("/uploads", express.static("uploads"));
