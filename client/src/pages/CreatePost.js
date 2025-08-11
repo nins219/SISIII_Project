@@ -20,10 +20,10 @@ const CreatePost = () => {
     activity_type: "",
     location: "",
     picture: null,
-    noOfPeople: "",
-    dateTime: "",
-    isPaid: false,
-    ticketPrice: "",
+    no_of_people: "",
+    date_time: "",
+    is_paid_event: false,
+    ticket_price: "",
   });
 
   const [error, setError] = useState("");
@@ -43,9 +43,10 @@ const CreatePost = () => {
   }, []);
 
   const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
@@ -58,6 +59,10 @@ const CreatePost = () => {
     for (let key in formData) {
       if (key === "picture" && formData.picture) {
         data.append("picture", formData.picture, formData.picture.name);
+      } else if (key === "is_paid_event") {
+        data.append("is_paid_event", formData.is_paid_event ? 1 : 0);
+      } else if (key === "ticket_price") {
+        data.append("ticket_price", formData.ticket_price || 0);
       } else if (key !== "picture") {
         data.append(key, formData[key]);
       }
@@ -66,6 +71,7 @@ const CreatePost = () => {
       const res = await fetch("http://localhost:5433/api/post/create", {
         method: "POST",
         body: data,
+        credentials: "include",
       });
 
       const result = await res.json();
@@ -78,10 +84,10 @@ const CreatePost = () => {
           activity_type: "",
           location: "",
           picture: null,
-          noOfPeople: "",
-          dateTime: "",
-          isPaid: false,
-          ticketPrice: "",
+          no_of_people: "",
+          date_time: "",
+          is_paid_event: false,
+          ticket_price: "",
         });
         navigate("/profile");
       } else {
@@ -166,7 +172,7 @@ const CreatePost = () => {
                 <label className="form-label">Activity Type</label>
                 <select
                   className="form-select"
-                  value={activity}
+                  value={formData.activity_type}
                   name="activity_type"
                   //maybe there will be a problem with this cuz i dont know how to get the value
                   onChange={handleChange}
@@ -199,7 +205,8 @@ const CreatePost = () => {
                 <input
                   type="number"
                   className="form-control"
-                  value={formData.noOfPeople}
+                  value={formData.no_of_people}
+                  name="no_of_people"
                   onChange={handleChange}
                 />
               </div>
@@ -208,8 +215,8 @@ const CreatePost = () => {
                 <input
                   type="datetime-local"
                   className="form-control"
-                  name="dateTime"
-                  value={formData.dateTime} //idk if this is correct format
+                  name="date_time"
+                  value={formData.date_time} //idk if this is correct format
                   onChange={handleChange}
                 />
               </div>
@@ -217,12 +224,12 @@ const CreatePost = () => {
                 <input
                   className="form-check-input"
                   type="checkbox"
-                  name="isPaid"
-                  checked={formData.isPaid}
+                  name="is_paid_event"
+                  checked={formData.is_paid_event}
                   onChange={handleChange}
-                  id="paidEvent"
+                  id="is_paid_event"
                 />
-                <label className="form-check-label" htmlFor="paidEvent">
+                <label className="form-check-label" htmlFor="is_paid_event">
                   Paid Event
                 </label>
               </div>
@@ -232,8 +239,8 @@ const CreatePost = () => {
                   type="number"
                   step="0.01"
                   className="form-control"
-                  value={formData.ticketPrice}
-                  name="ticketPrice"
+                  value={formData.ticket_price}
+                  name="ticket_price"
                   onChange={handleChange}
                 />
               </div>
@@ -244,7 +251,10 @@ const CreatePost = () => {
                   className="form-control"
                   accept="image/*"
                   onChange={(e) =>
-                    setFormData({ ...formData, picture: e.target.files[0] })
+                    setFormData((prev) => ({
+                      ...prev,
+                      picture: e.target.files[0],
+                    }))
                   }
                 />
               </div>
