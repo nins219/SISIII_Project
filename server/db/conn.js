@@ -201,7 +201,7 @@ dataPool.addRequest = (user_id, post_id) => {
 dataPool.pendingRequestsForHost = (host_id) => {
   return new Promise((resolve, reject) => {
     const query =
-      "SELECT r.id, r.user_id, r.status, r.status_updated_at, u.name, u.surname FROM request r JOIN post p ON r.post_id = p.post_id JOIN user u ON r.user_id = u.user_id WHERE p.user_id = ? AND r.status = 'pending' ORDER BY r.status_updated_at DESC";
+      "SELECT r.id, r.user_id, r.status, r.status_updated_at, u.name, u.surname FROM request r JOIN post p ON r.post_id = p.post_id JOIN user u ON r.user_id = u.user_id WHERE p.user_id = ? ORDER BY r.status_updated_at DESC";
     conn.query(query, [host_id], (err, res) => {
       if (err) {
         reject(err);

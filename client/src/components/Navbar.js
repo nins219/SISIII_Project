@@ -34,7 +34,9 @@ const Navbar = () => {
         body: JSON.stringify({ status }),
       });
       if (res.ok) {
-        setNotifications((prev) => prev.filter((n) => n.id !== id));
+        setNotifications((prev) =>
+          prev.map((n) => (n.id === id ? { ...n, status } : n))
+        );
       }
     } catch (err) {
       console.error("Failed to update request", err);
@@ -63,7 +65,10 @@ const Navbar = () => {
             Notifications
             {notifications.length > 0 ? ` (${notifications.length})` : ""}
           </a>
-          <ul className="dropdown-menu">
+          <ul
+            className="dropdown-menu"
+            style={{ maxHeight: "300px", overflowY: "auto" }}
+          >
             {notifications.length === 0 && (
               <li>
                 <span className="dropdown-item-text">No notifications</span>
@@ -74,33 +79,43 @@ const Navbar = () => {
                 <div className="d-flex justify-content-between align-items-start">
                   <div
                     style={{ cursor: "pointer" }}
-                    onClick={() => navigate(`/user/${n.user_id}`)}
+                    onClick={() =>
+                      navigate(
+                        `/user/${n.user_id}?requestId=${n.id}&status=${n.status}`
+                      )
+                    }
                   >
                     <div>{`${n.name} ${n.surname} requested to join your post`}</div>
                     <small className="text-muted">
                       {new Date(n.status_updated_at).toLocaleString()}
                     </small>
                   </div>
-                  <div>
-                    <button
-                      className="btn btn-sm btn-success me-1"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleAction(n.id, "accepted");
-                      }}
-                    >
-                      Accept
-                    </button>
-                    <button
-                      className="btn btn-sm btn-danger"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleAction(n.id, "declined");
-                      }}
-                    >
-                      Decline
-                    </button>
-                  </div>
+                  {n.status === "pending" ? (
+                    <div>
+                      <button
+                        className="btn btn-sm btn-success me-1"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleAction(n.id, "accepted");
+                        }}
+                      >
+                        Accept
+                      </button>
+                      <button
+                        className="btn btn-sm btn-danger"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleAction(n.id, "declined");
+                        }}
+                      >
+                        Decline
+                      </button>
+                    </div>
+                  ) : (
+                    <span className="badge bg-secondary text-uppercase">
+                      {n.status}
+                    </span>
+                  )}
                 </div>
               </li>
             ))}
