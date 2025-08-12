@@ -16,7 +16,7 @@ const Review = () => {
   useEffect(() => {
     const fetchHost = async () => {
       try {
-        const res = await fetch(`http://localhost:5433/api/user/${hostId}`);
+        const res = await fetch(`http://88.200.63.148:5433/api/user/${hostId}`);
         if (res.ok) {
           const data = await res.json();
           setHost(data);
@@ -31,7 +31,7 @@ const Review = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:5433/api/review/create", {
+      const res = await fetch("http://88.200.63.148:5433/api/review/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

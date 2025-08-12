@@ -10,7 +10,7 @@ const Home = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const res = await fetch("http://localhost:5433/api/post");
+      const res = await fetch("http://88.200.63.148:5433/api/post");
       const data = await res.json();
       if (res.ok) {
         setPosts(data);

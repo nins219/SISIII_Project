@@ -7,7 +7,7 @@ const Post = ({ post }) => {
     const checkRequest = async () => {
       try {
         const res = await fetch(
-          `http://localhost:5433/api/request/status/${post.id}`,
+          `http://88.200.63.148:5433/api/request/status/${post.id}`,
           {
             credentials: "include",
           }
@@ -26,7 +26,7 @@ const Post = ({ post }) => {
 
   const handleRequest = async () => {
     try {
-      const res = await fetch("http://localhost:5433/api/request/create", {
+      const res = await fetch("http://88.200.63.148:5433/api/request/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

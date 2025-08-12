@@ -33,7 +33,7 @@ const CreatePost = () => {
 
   useEffect(() => {
     const fetchActivities = async () => {
-      const res = await fetch("http://localhost:5433/api/post/activities");
+      const res = await fetch("http://88.200.63.148:5433/api/post/activities");
       if (res.ok) {
         const data = await res.json();
         setActivities(data);
@@ -70,7 +70,7 @@ const CreatePost = () => {
       }
     });
     try {
-      const res = await fetch("http://localhost:5433/api/post/create", {
+      const res = await fetch("http://88.200.63.148:5433/api/post/create", {
         method: "POST",
         body: data,
         credentials: "include",
@@ -116,7 +116,7 @@ const CreatePost = () => {
   //   const [error, setError] = useState("");
   //   const [success, setSuccess] = useState("");
 
-  //   const res = await fetch("http://localhost:5433/api/post/create", {
+  //   const res = await fetch("http://88.200.63.148:5433/api/post/create", {
   //     method: "POST",
   //     body: formData,
   //     credentials: "include",

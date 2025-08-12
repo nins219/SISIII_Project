@@ -12,7 +12,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch("http://localhost:5433/api/user/me", {
+        const res = await fetch("http://88.200.63.148:5433/api/user/me", {
           credentials: "include",
         });
         if (res.ok) {
@@ -28,7 +28,7 @@ const Profile = () => {
 
     const fetchRating = async () => {
       try {
-        const res = await fetch("http://localhost:5433/api/review/average/me", {
+        const res = await fetch("http://88.200.63.148:5433/api/review/average/me", {
           credentials: "include",
         });
         if (res.ok) {
@@ -42,7 +42,7 @@ const Profile = () => {
 
     const fetchPosts = async () => {
       try {
-        const res = await fetch("http://localhost:5433/api/post/mine", {
+        const res = await fetch("http://88.200.63.148:5433/api/post/mine", {
           credentials: "include",
         });
         if (res.ok) {

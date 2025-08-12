@@ -10,7 +10,7 @@ const Navbar = () => {
     const fetchNotifications = async () => {
       try {
         const res = await fetch(
-          "http://localhost:5433/api/request/notifications",
+          "http://88.200.63.148:5433/api/request/notifications",
           {
             credentials: "include",
           }
@@ -26,7 +26,7 @@ const Navbar = () => {
 
     const fetchReviewNotifications = async () => {
       try {
-        const res = await fetch("http://localhost:5433/api/review/pending", {
+        const res = await fetch("http://88.200.63.148:5433/api/review/pending", {
           credentials: "include",
         });
         if (res.ok) {
@@ -43,7 +43,7 @@ const Navbar = () => {
 
   const handleAction = async (id, status) => {
     try {
-      const res = await fetch(`http://localhost:5433/api/request/${id}`, {
+      const res = await fetch(`http://88.200.63.148:5433/api/request/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
