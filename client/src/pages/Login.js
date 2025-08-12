@@ -17,7 +17,7 @@ const Login = () => {
     setSuccess("");
     const endpoint =
       // isRegister ? "http://88.200.63.148:5433/api/user/register" :
-      "http://88.200.63.148:5433/api/user/login";
+      `${API}/api/user/login`;
 
     try {
       const res = await fetch(endpoint, {

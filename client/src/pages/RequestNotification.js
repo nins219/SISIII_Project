@@ -15,7 +15,7 @@ const RequestNotification = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch(`http://localhost:5433/api/user/${id}`);
+        const res = await fetch(`${API}/api/user/${id}`);
         if (res.ok) {
           const data = await res.json();
           setUser(data);
@@ -29,15 +29,12 @@ const RequestNotification = () => {
 
   const handleAction = async (action) => {
     try {
-      const res = await fetch(
-        `http://localhost:5433/api/request/${requestId}`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({ status: action }),
-        }
-      );
+      const res = await fetch(`${API}/api/request/${requestId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ status: action }),
+      });
       if (res.ok) {
         setStatus(action);
       }

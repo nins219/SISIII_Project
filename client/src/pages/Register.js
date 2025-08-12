@@ -39,7 +39,7 @@ const Register = () => {
       }
     }
     try {
-      const res = await fetch("http://localhost:5433/api/user/register", {
+      const res = await fetch(`${API}/api/user/register`, {
         method: "POST",
         body: data,
       });

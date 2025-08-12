@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import API from "apiBase";
 
 const Post = ({ post }) => {
   const [requested, setRequested] = useState(false);
@@ -6,12 +7,9 @@ const Post = ({ post }) => {
   useEffect(() => {
     const checkRequest = async () => {
       try {
-        const res = await fetch(
-          `http://88.200.63.148:5433/api/request/status/${post.id}`,
-          {
-            credentials: "include",
-          }
-        );
+        const res = await fetch(`${API}/api/request/status/${post.id}`, {
+          credentials: "include",
+        });
         if (res.ok) {
           const data = await res.json();
           setRequested(data.requested);
@@ -26,7 +24,7 @@ const Post = ({ post }) => {
 
   const handleRequest = async () => {
     try {
-      const res = await fetch("http://88.200.63.148:5433/api/request/create", {
+      const res = await fetch(`${API}/api/request/create`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
