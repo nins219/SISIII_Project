@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
+import API from "../apiBase";
 
 const CreatePost = () => {
   // const [title, setTitle] = useState("");
@@ -70,7 +71,7 @@ const CreatePost = () => {
       }
     });
     try {
-      const res = await fetch(`${API}:5433/api/post/create`, {
+      const res = await fetch(`${API}/api/post/create`, {
         method: "POST",
         body: data,
         credentials: "include",

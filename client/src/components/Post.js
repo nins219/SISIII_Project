@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import API from "apiBase";
+import API from "../apiBase";
 
 const Post = ({ post }) => {
   const [requested, setRequested] = useState(false);

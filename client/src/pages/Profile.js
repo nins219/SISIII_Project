@@ -3,6 +3,8 @@ import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
 import User from "../components/User";
 import Post from "../components/Post";
+import API from "../apiBase";
+
 
 const Profile = () => {
   const [user, setUser] = useState(null);

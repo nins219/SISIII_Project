@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import User from "../components/User";
+import API from "../apiBase";
 
 const Review = () => {
   const { postId } = useParams();

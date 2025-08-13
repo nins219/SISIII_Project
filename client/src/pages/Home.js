@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import SearchBar from "../components/Searchbar";
 import Post from "../components/Post";
 import Navbar from "../components/Navbar";
+import API from "../apiBase";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);

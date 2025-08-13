@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import User from "../components/User";
+import API from "../apiBase";
 
 const RequestNotification = () => {
   const { id } = useParams();
