@@ -49,7 +49,7 @@ console.log("Connecting to:", process.env.DB_HOST);
 
 app.use(
   cors({
-    origin: "http://88.200.63.148:3067", // Change to your frontend IP/port
+    origin: "http://localhost:3067", // Change to your frontend IP/port
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
     allowedHeaders: "Content-Type,Authorization",
