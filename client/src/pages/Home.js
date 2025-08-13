@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import SearchBar from "../components/Searchbar";
 import Post from "../components/Post";
 import Navbar from "../components/Navbar";
+import API from "../apiBase";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -10,7 +11,7 @@ const Home = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const res = await fetch("http://localhost:5433/api/post");
+      const res = await fetch(`${API}/api/post`);
       const data = await res.json();
       if (res.ok) {
         setPosts(data);

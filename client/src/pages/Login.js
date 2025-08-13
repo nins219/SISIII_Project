@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import API from "../apiBase";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -16,8 +17,8 @@ const Login = () => {
     setError("");
     setSuccess("");
     const endpoint =
-      // isRegister ? "http://localhost:5433/api/user/register" :
-      "http://localhost:5433/api/user/login";
+      // isRegister ? "http://88.200.63.148:5433/api/user/register" :
+      `${API}/api/user/login`;
 
     try {
       const res = await fetch(endpoint, {

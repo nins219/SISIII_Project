@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import API from "../apiBase";
 
 const Navbar = () => {
   const [notifications, setNotifications] = useState([]);
@@ -9,12 +10,9 @@ const Navbar = () => {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const res = await fetch(
-          "http://localhost:5433/api/request/notifications",
-          {
-            credentials: "include",
-          }
-        );
+        const res = await fetch(`${API}/api/request/notifications`, {
+          credentials: "include",
+        });
         if (res.ok) {
           const data = await res.json();
           setNotifications(data);
@@ -26,7 +24,7 @@ const Navbar = () => {
 
     const fetchReviewNotifications = async () => {
       try {
-        const res = await fetch("http://localhost:5433/api/review/pending", {
+        const res = await fetch(`${API}/api/review/pending`, {
           credentials: "include",
         });
         if (res.ok) {
@@ -43,7 +41,7 @@ const Navbar = () => {
 
   const handleAction = async (id, status) => {
     try {
-      const res = await fetch(`http://localhost:5433/api/request/${id}`, {
+      const res = await fetch(`${API}/api/request/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

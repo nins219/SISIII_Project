@@ -3,6 +3,8 @@ import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
 import User from "../components/User";
 import Post from "../components/Post";
+import API from "../apiBase";
+
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -12,7 +14,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch("http://localhost:5433/api/user/me", {
+        const res = await fetch(`${API}/api/user/me`, {
           credentials: "include",
         });
         if (res.ok) {
@@ -28,7 +30,7 @@ const Profile = () => {
 
     const fetchRating = async () => {
       try {
-        const res = await fetch("http://localhost:5433/api/review/average/me", {
+        const res = await fetch(`${API}/api/review/average/me`, {
           credentials: "include",
         });
         if (res.ok) {
@@ -42,7 +44,7 @@ const Profile = () => {
 
     const fetchPosts = async () => {
       try {
-        const res = await fetch("http://localhost:5433/api/post/mine", {
+        const res = await fetch(`${API}/api/post/mine`, {
           credentials: "include",
         });
         if (res.ok) {

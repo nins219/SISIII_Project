@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import API from "../apiBase";
 
 const Register = () => {
   const [formData, setFormData] = React.useState({
@@ -39,7 +40,7 @@ const Register = () => {
       }
     }
     try {
-      const res = await fetch("http://localhost:5433/api/user/register", {
+      const res = await fetch(`${API}/api/user/register`, {
         method: "POST",
         body: data,
       });

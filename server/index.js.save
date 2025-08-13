@@ -49,7 +49,7 @@ console.log("Connecting to:", process.env.DB_HOST);
 
 app.use(
   cors({
-    origin: "http://88.200.63.148:3067", // Change to your frontend IP/port
+"http://88.200.63.148:3076"    origin: "http://localhost:3067", // Change to your frontend IP/port
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
     allowedHeaders: "Content-Type,Authorization",
@@ -73,7 +73,7 @@ app.use("/api/review", review);
 //FOR PICTURE UPLOADS
 // app.use("/uploads", express.static("uploads"));
 
-const port = 5474 || process.env.PORT;
+const port = 5433 || process.env.PORT;
 
 app.listen(process.env.PORT || port, () => {
   console.log(`Server started at: ${port || process.env.PORT}`);

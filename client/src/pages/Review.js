@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import User from "../components/User";
+import API from "../apiBase";
 
 const Review = () => {
   const { postId } = useParams();
@@ -16,7 +17,7 @@ const Review = () => {
   useEffect(() => {
     const fetchHost = async () => {
       try {
-        const res = await fetch(`http://localhost:5433/api/user/${hostId}`);
+        const res = await fetch(`${API}/api/user/${hostId}`);
         if (res.ok) {
           const data = await res.json();
           setHost(data);
@@ -31,7 +32,7 @@ const Review = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:5433/api/review/create", {
+      const res = await fetch(`${API}/api/review/create`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
