@@ -1,4 +1,5 @@
 import React from "react";
+import API from "../apiBase";
 
 const User = ({ user }) => {
   return (
@@ -10,7 +11,7 @@ const User = ({ user }) => {
         {user.picture && (
           <div style={{ flex: "1" }}>
             <img
-              src={user.picture}
+              src={new URL(user.picture, API).href}
               alt="Profile"
               className="img-fluid rounded"
               style={{

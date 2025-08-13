@@ -52,7 +52,7 @@ const Post = ({ post }) => {
         <p className="card-text">{post.description}</p>
         {post.picture && (
           <img
-            src={post.picture}
+            src={new URL(post.picture, API).href}
             alt="Post"
             className="img-fluid rounded mt-3"
             style={{ maxHeight: "300px", objectFit: "cover", width: "100%" }}
