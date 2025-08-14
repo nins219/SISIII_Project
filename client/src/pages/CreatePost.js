@@ -101,43 +101,13 @@ const CreatePost = () => {
     }
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   const formData = new FormData();
-  //   formData.append("title", title);
-  //   formData.append("description", description);
-  //   formData.append("activity_type", activity);
-  //   formData.append("location", location);
-  //   formData.append("no_of_people", noOfPeople);
-  //   formData.append("date_time", dateTime);
-  //   formData.append("is_paid_event", isPaid ? 1 : 0);
-  //   formData.append("ticket_price", ticketPrice || 0);
-  //   if (picture) formData.append("picture", picture);
-
-  //   const [error, setError] = useState("");
-  //   const [success, setSuccess] = useState("");
-
-  //   const res = await fetch("http://88.200.63.148:5433/api/post/create", {
-  //     method: "POST",
-  //     body: formData,
-  //     credentials: "include",
-  //   });
-
-  //   if (res.ok) {
-  //     navigate("/profile");
-  //   } else {
-  //     console.error("Failed to create post");
-  //   }
-  // };
-
   return (
     <div>
       <Navbar />
       <div className="container mt-5">
-        <h2>Create Post</h2>
         <div className="card mx-auto" style={{ maxWidth: "600px" }}>
           <div className="card-body">
-            <h2 className="text-center mb-4">Register</h2>
+            <h2 className="text-center mb-4">Create Post</h2>
             {error && (
               <div className="alert alert-danger text-center py-2">{error}</div>
             )}
