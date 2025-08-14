@@ -22,7 +22,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/home" element={<Home />} />
         <Route path="/createpost" element={<CreatePost />} />
-        {/* <Route path="/edit-profile" element={<EditProfile />} /> */}
+        <Route path="/editprofile" element={<EditProfile />} />
         <Route path="/user/:id" element={<RequestNotification />} />
         <Route path="/review/:postId" element={<Review />} />
       </Routes>

@@ -108,6 +108,40 @@ user.get("/me", (req, res) => {
   }
 });
 
+user.put("/me", upload.single("picture"), async (req, res) => {
+  if (!req.session) {
+    return res.status(401).json({ error: "Not authenticated" });
+  }
+  try {
+    const user_id = req.session.user_id;
+    const { name, surname, city, language, bio } = req.body;
+    const picturePath = req.file ? req.file.path : req.session.picture || null;
+
+    await db.updateUser(user_id, {
+      name,
+      surname,
+      city,
+      language,
+      bio,
+      picture: picturePath,
+    });
+
+    Object.assign(req.session, {
+      name,
+      surname,
+      city,
+      language,
+      bio,
+      picture: picturePath,
+    });
+
+    res.json({ message: "Profile updated" });
+  } catch (err) {
+    console.error("Update profile error:", err.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 user.get("/:id", async (req, res) => {
   try {
     const result = await db.oneUser(req.params.id);
