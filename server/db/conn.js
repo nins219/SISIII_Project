@@ -64,10 +64,10 @@ dataPool.allUsers = () => {
   return new Promise((resolve, reject) => {
     conn.query("SELECT * FROM user", (err, res) => {
       if (err) {
-        console.log("❌ Error in allUsers:", err.message);
+        console.log("{Error: cannot fetch all users}:", err.message);
         reject(err);
       } else {
-        console.log("✅ allUsers query succeeded");
+        console.log("Get all users success");
         resolve(res);
       }
     });
@@ -269,4 +269,28 @@ dataPool.pendingReviewsForUser = (user_id) => {
     });
   });
 };
+
+dataPool.updateUser = (user_id, userData) => {
+  return new Promise((resolve, reject) => {
+    const query =
+      "UPDATE user SET name = ?, surname = ?, city = ?, language = ?, bio = ?, picture = ? WHERE user_id = ?";
+    const values = [
+      userData.name,
+      userData.surname,
+      userData.city,
+      userData.language,
+      userData.bio,
+      userData.picture,
+      user_id,
+    ];
+    conn.query(query, values, (err, res) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(res);
+      }
+    });
+  });
+};
+
 export default dataPool;
