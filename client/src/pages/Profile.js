@@ -5,10 +5,10 @@ import User from "../components/User";
 import Post from "../components/Post";
 import API from "../apiBase";
 
-
 const Profile = () => {
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
+  const [reviews, setReviews] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -56,9 +56,24 @@ const Profile = () => {
       }
     };
 
+    const fetchReviews = async () => {
+      try {
+        const res = await fetch(`${API}/api/review/me`, {
+          credentials: "include",
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setReviews(data);
+        }
+      } catch (err) {
+        console.error("Failed to fetch reviews", err);
+      }
+    };
+
     fetchUser();
     fetchPosts();
     fetchRating();
+    fetchReviews();
   }, [navigate]);
 
   if (!user) {
@@ -104,6 +119,24 @@ const Profile = () => {
             </div>
           ))}
         </div>
+      </div>
+      <div className="container mt-5 mb-5">
+        <h3 className="mb-3">Reviews</h3>
+        {reviews.length === 0 ? (
+          <p>No reviews yet</p>
+        ) : (
+          reviews.map((rev) => (
+            <div key={rev.id} className="card mb-3">
+              <div className="card-body">
+                <h5 className="card-title">{`${rev.name} ${rev.surname}`}</h5>
+                <h6 className="card-subtitle mb-2 text-muted">
+                  Rating: {rev.rating}
+                </h6>
+                {rev.comment && <p className="card-text">{rev.comment}</p>}
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

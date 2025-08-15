@@ -242,6 +242,17 @@ dataPool.addReview = ({ from_user_id, to_post_id, rating, comment }) => {
   });
 };
 
+dataPool.reviewsForUser = (user_id) => {
+  return new Promise((resolve, reject) => {
+    const query =
+      "SELECT r.id, r.rating, r.comment, r.created_at, u.user_id, u.name, u.surname FROM review r JOIN post p ON r.to_post_id = p.post_id JOIN user u ON r.from_user_id = u.user_id WHERE p.user_id = ? ORDER BY r.created_at DESC";
+    conn.query(query, [user_id], (err, res) => {
+      if (err) reject(err);
+      else resolve(res);
+    });
+  });
+};
+
 dataPool.getAverageRating = (user_id) => {
   return new Promise((resolve, reject) => {
     const query =

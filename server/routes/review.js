@@ -80,4 +80,17 @@ review.get("/average/me", async (req, res) => {
   }
 });
 
+review.get("/me", async (req, res) => {
+  try {
+    if (!req.session) {
+      return res.status(401).json({ error: "Not authenticated" });
+    }
+    const reviews = await db.reviewsForUser(req.session.user_id);
+    res.json(reviews);
+  } catch (err) {
+    console.error("Error fetching reviews for user:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 export default review;
