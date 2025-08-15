@@ -115,7 +115,7 @@ const Profile = () => {
               key={post.id}
               className="col-md-4 d-flex justify-content-center mb-4"
             >
-              <Post post={post} />
+              <Post post={post} currentUserId={user.user_id} />
             </div>
           ))}
         </div>

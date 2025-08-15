@@ -102,7 +102,7 @@ user.post("/login", async (req, res) => {
 user.get("/me", (req, res) => {
   if (req.session) {
     const { user_id, ...safeUser } = req.session;
-    res.json(safeUser);
+    res.json({ user_id, ...safeUser });
   } else {
     res.status(401).json({ error: "Not authenticated" });
   }

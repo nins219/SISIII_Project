@@ -41,10 +41,20 @@ request.post("/create", async (req, res) => {
     if (postId == null) {
       return res.status(400).json({ error: "postId is required" });
     }
+    const post = await db.getPostById(postId);
+
+    if (!post) {
+      return res.status(404).json({ error: "post not found" });
+    }
+
+    if (post.user_id === req.session.user_id) {
+      return res.status(403).json({ error: "You can't request your own post" });
+    }
+
     await db.addRequest(req.session.user_id, postId);
     res.json({ requested: true });
   } catch (err) {
-    console.error("Error creating request:", err);
+    console.error("Error creating request", err);
     res.status(500).json({ error: "Internal server error" });
   }
 });

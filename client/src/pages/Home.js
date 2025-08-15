@@ -8,6 +8,7 @@ import API from "../apiBase";
 const Home = () => {
   const [posts, setPosts] = useState([]);
   const [filtered, setFiltered] = useState([]);
+  const [currentUserId, setCurrentUserId] = useState([]);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -20,7 +21,26 @@ const Home = () => {
         console.error("Failed to fetch posts");
       }
     };
+
+    const fetchMe = async () => {
+      try {
+        const res = await fetch(`${API}//api/user/me`, {
+          credentials: "include",
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setCurrentUserId(data.user_id);
+        } else {
+          setCurrentUserId(null);
+        }
+      } catch (err) {
+        console.error("Failed to fetch logged in user id", err);
+        setCurrentUserId(null);
+      }
+    };
+
     fetchPosts();
+    fetchMe();
   }, []);
 
   const handleSearch = (term) => {
@@ -41,7 +61,7 @@ const Home = () => {
         <div className="row">
           {filtered.map((post) => (
             <div key={post.id} className="col-md-3 mb-4">
-              <Post post={post} />
+              <Post post={post} currentUserId={currentUserId} />
             </div>
           ))}
         </div>

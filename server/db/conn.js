@@ -120,6 +120,19 @@ dataPool.postByUser = (user_id) => {
   });
 };
 
+dataPool.getPostById = (post_id) => {
+  return new Promise((resolve, reject) => {
+    const query = "SELECT user_id FROM post WHERE post_id = ?";
+    conn.query(query, [post_id], (err, res) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(res.length > 0 ? res[0] : null);
+      }
+    });
+  });
+};
+
 dataPool.allActivities = () => {
   return new Promise((resolve, reject) => {
     conn.query("SELECT * FROM activity_type", (err, res) => {
