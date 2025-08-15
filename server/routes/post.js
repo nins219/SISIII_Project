@@ -80,6 +80,12 @@ post.post("/create", upload.single("picture"), async (req, res) => {
 
     const picturePath = req.file ? req.file.path : null;
 
+    if (date_time && new Date(date_time) <= new Date()) {
+      return res
+        .status(400)
+        .json({ error: "Date and time must be in the future" });
+    }
+
     const formattedDate = date_time
       ? new Date(date_time).toISOString().slice(0, 19).replace("T", " ")
       : null;

@@ -3,9 +3,13 @@ import API from "../apiBase";
 
 const Post = ({ post, currentUserId }) => {
   const [requested, setRequested] = useState(false);
+  const isPast = post.date_time
+    ? new Date(post.date_time) <= new Date()
+    : false;
 
   useEffect(() => {
-    if (currentUserId === undefined || post.user_id === currentUserId) return;
+    if (isPast || currentUserId === undefined || post.user_id === currentUserId)
+      return;
 
     const checkRequest = async () => {
       try {
@@ -22,10 +26,10 @@ const Post = ({ post, currentUserId }) => {
     };
 
     checkRequest();
-  }, [post.id, currentUserId]);
+  }, [post.id, currentUserId, isPast]);
 
   const handleRequest = async () => {
-    if (post.user_id === currentUserId) return;
+    if (isPast || post.user_id === currentUserId) return;
 
     try {
       const res = await fetch(`${API}/api/request/create`, {
@@ -49,7 +53,9 @@ const Post = ({ post, currentUserId }) => {
         <div className="d-flex justify-content-between align-items-center mb-2">
           <h5 className="card-title mb-0">{post.title}</h5>
           <small className="text-muted">
-            {new Date(post.created_at).toLocaleDateString()}
+            {post.date_time
+              ? new Date(post.date_time).toLocaleString()
+              : new Date(post.created_at).toLocaleDateString()}
           </small>
         </div>
 
@@ -68,11 +74,13 @@ const Post = ({ post, currentUserId }) => {
           </small>
           {currentUserId !== undefined && post.user_id !== currentUserId && (
             <button
-              className={`btn ${requested ? "btn-secondary" : "btn-primary"}`}
+              className={`btn ${
+                requested || isPast ? "btn-secondary" : "btn-primary"
+              }`}
               onClick={handleRequest}
-              disabled={requested}
+              disabled={requested || isPast}
             >
-              {requested ? "Requested" : "Request"}
+              {isPast ? "passed" : requested ? "Requested" : "Request"}
             </button>
           )}
         </div>

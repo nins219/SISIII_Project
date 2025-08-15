@@ -122,7 +122,7 @@ dataPool.postByUser = (user_id) => {
 
 dataPool.getPostById = (post_id) => {
   return new Promise((resolve, reject) => {
-    const query = "SELECT user_id FROM post WHERE post_id = ?";
+    const query = "SELECT user_id, date_time FROM post WHERE post_id = ?";
     conn.query(query, [post_id], (err, res) => {
       if (err) {
         reject(err);
