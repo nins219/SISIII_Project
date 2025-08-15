@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import API from "../apiBase";
 
-const Post = ({ post }) => {
+const Post = ({ post, currentUserId }) => {
   const [requested, setRequested] = useState(false);
 
   useEffect(() => {
+    if (currentUserId === undefined || post.user_id === currentUserId) return;
+
     const checkRequest = async () => {
       try {
         const res = await fetch(`${API}/api/request/status/${post.id}`, {
@@ -20,9 +22,11 @@ const Post = ({ post }) => {
     };
 
     checkRequest();
-  }, [post.id]);
+  }, [post.id, currentUserId]);
 
   const handleRequest = async () => {
+    if (post.user_id === currentUserId) return;
+
     try {
       const res = await fetch(`${API}/api/request/create`, {
         method: "POST",
@@ -62,13 +66,15 @@ const Post = ({ post }) => {
           <small className="text-muted">
             By {post.name} {post.surname}
           </small>
-          <button
-            className={`btn ${requested ? "btn-secondary" : "btn-primary"}`}
-            onClick={handleRequest}
-            disabled={requested}
-          >
-            {requested ? "Requested" : "Request"}
-          </button>
+          {currentUserId !== undefined && post.user_id !== currentUserId && (
+            <button
+              className={`btn ${requested ? "btn-secondary" : "btn-primary"}`}
+              onClick={handleRequest}
+              disabled={requested}
+            >
+              {requested ? "Requested" : "Request"}
+            </button>
+          )}
         </div>
       </div>
     </div>
