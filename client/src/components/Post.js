@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import API from "../apiBase";
 
-const Post = ({ post, currentUserId }) => {
+const Post = ({
+  post,
+  currentUserId,
+  showOptions = false,
+  onEdit,
+  onDelete,
+}) => {
   const [requested, setRequested] = useState(false);
   const isPast = post.date_time
     ? new Date(post.date_time) <= new Date()
@@ -47,9 +53,53 @@ const Post = ({ post, currentUserId }) => {
     }
   };
 
+  const handleDelete = async () => {
+    try {
+      const res = await fetch(`${API}/api/post/${post.id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      if (res.ok && onDelete) {
+        onDelete(post.id);
+      }
+    } catch (err) {
+      console.error("Failed to delete post", err);
+    }
+  };
+
   return (
     <div className="card mb-4 shadow-sm">
-      <div className="card-body">
+      <div className="card-body position-relative">
+        {showOptions && (
+          <div className="dropdown position-absolute top-0 end-0 mt-1 me-2">
+            <button
+              className="btn btn-link text-muted"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              &#8942;
+            </button>
+            <ul className="dropdown-menu dropdown-menu-end">
+              <li>
+                <button
+                  className="dropdown-item"
+                  onClick={() => onEdit && onEdit(post)}
+                >
+                  Edit
+                </button>
+              </li>
+              <li>
+                <button
+                  className="dropdown-item text-danger"
+                  onClick={handleDelete}
+                >
+                  Delete
+                </button>
+              </li>
+            </ul>
+          </div>
+        )}
         <div className="d-flex justify-content-between align-items-center mb-2">
           <h5 className="card-title mb-0">{post.title}</h5>
           <small className="text-muted">

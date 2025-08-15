@@ -118,4 +118,75 @@ post.post("/create", upload.single("picture"), async (req, res) => {
   }
 });
 
+post.put("/update/:id", upload.single("picture"), async (req, res) => {
+  try {
+    if (!req.session) {
+      return res.status(401).json({ error: "Not authenticated" });
+    }
+    const postId = req.params.id;
+    const existing = await db.getPostById(postId);
+    if (!existing || existing.user_id !== req.session.user_id) {
+      return res.status(403).json({ error: "Forbidden" });
+    }
+
+    const {
+      title,
+      description,
+      activity_type,
+      location,
+      no_of_people,
+      date_time,
+      is_paid_event,
+      ticket_price,
+      status = "open",
+      visibility_type = "public",
+      existingPicture,
+    } = req.body;
+
+    const picturePath = req.file ? req.file.path : existingPicture || null;
+
+    const formattedDate = date_time
+      ? new Date(date_time).toISOString().slice(0, 19).replace("T", " ")
+      : null;
+
+    const postData = {
+      title,
+      description,
+      activity_type: activity_type ? parseInt(activity_type, 10) : null,
+      location,
+      picture: picturePath,
+      no_of_people: no_of_people ? parseInt(no_of_people, 10) : null,
+      date_time: formattedDate,
+      is_paid_event: is_paid_event ? 1 : 0,
+      ticket_price: ticket_price ? parseFloat(ticket_price) : 0,
+      status,
+      visibility_type,
+    };
+
+    await db.updatePost(postId, req.session.user_id, postData);
+    res.json({ message: "Post updated successfully" });
+  } catch (err) {
+    console.error("Error updating post:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+post.delete("/:id", async (req, res) => {
+  try {
+    if (!req.session) {
+      return res.status(401).json({ error: "Not authenticated" });
+    }
+    const postId = req.params.id;
+    const existing = await db.getPostById(postId);
+    if (!existing || existing.user_id !== req.session.user_id) {
+      return res.status(403).json({ error: "Forbidden" });
+    }
+    await db.deletePost(postId, req.session.user_id);
+    res.json({ message: "Post deleted successfully" });
+  } catch (err) {
+    console.error("Error deleting post:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 export default post;

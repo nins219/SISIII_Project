@@ -60,7 +60,7 @@ dataPool.authUser = (email) => {
 };
 
 dataPool.allUsers = () => {
-  console.log("🔍 allUsers() called");
+  console.log("allUsers() called");
   return new Promise((resolve, reject) => {
     conn.query("SELECT * FROM user", (err, res) => {
       if (err) {
@@ -82,6 +82,68 @@ dataPool.oneUser = (user_id) => {
       } else {
         resolve(res);
       }
+    });
+  });
+};
+
+dataPool.updatePost = (post_id, user_id, postData) => {
+  return new Promise((resolve, reject) => {
+    const query =
+      "UPDATE post SET title = ?, description = ?, activity_type = ?, location = ?, no_of_people = ?, date_time = ?, is_paid_event = ?, ticket_price = ?, status = ?, visibility_type = ?, picture = IFNULL(?, picture) WHERE post_id = ? AND user_id = ?";
+    const values = [
+      postData.title,
+      postData.description,
+      postData.activity_type,
+      postData.location,
+      postData.no_of_people,
+      postData.date_time,
+      postData.is_paid_event,
+      postData.ticket_price,
+      postData.status || "open",
+      postData.visibility_type || "public",
+      postData.picture,
+      post_id,
+      user_id,
+    ];
+    conn.query(query, values, (err, res) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(res);
+      }
+    });
+  });
+};
+
+dataPool.deletePost = (post_id) => {
+  return new Promise((resolve, reject) => {
+    conn.beginTransaction((err) => {
+      if (err) return reject(err);
+
+      // Remove all related requests first to keep referential integrity
+      conn.query("DELETE FROM request WHERE post_id = ?", [post_id], (err) => {
+        if (err) {
+          return conn.rollback(() => reject(err));
+        }
+
+        // Delete the post itself
+        conn.query(
+          "DELETE FROM post WHERE post_id = ?",
+          [post_id],
+          (err, result) => {
+            if (err) {
+              return conn.rollback(() => reject(err));
+            }
+
+            conn.commit((err) => {
+              if (err) {
+                return conn.rollback(() => reject(err));
+              }
+              resolve(result);
+            });
+          }
+        );
+      });
     });
   });
 };
