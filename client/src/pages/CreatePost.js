@@ -4,15 +4,6 @@ import { useNavigate } from "react-router-dom";
 import API from "../apiBase";
 
 const CreatePost = () => {
-  // const [title, setTitle] = useState("");
-  // const [description, setDescription] = useState("");
-  // const [activity, setActivity] = useState("");
-  // const [location, setLocation] = useState("");
-  // const [picture, setPicture] = useState(null);
-  // const [noOfPeople, setNoOfPeople] = useState("");
-  // const [dateTime, setDateTime] = useState("");
-  // const [isPaid, setIsPaid] = useState(false);
-  // const [ticketPrice, setTicketPrice] = useState("");
   const [activities, setActivities] = useState([]);
 
   const [formData, setFormData] = useState({
@@ -31,6 +22,7 @@ const CreatePost = () => {
   const [success, setSuccess] = useState("");
 
   const navigate = useNavigate();
+  const minDateTime = new Date().toISOString().slice(0, 16);
 
   useEffect(() => {
     const fetchActivities = async () => {
@@ -55,6 +47,14 @@ const CreatePost = () => {
     e.preventDefault();
     setError("");
     setSuccess("");
+
+    if (
+      formData.date_time &&
+      new Date(formData.date_time).getTime() <= Date.now()
+    ) {
+      setError("Date and time must be in the future");
+      return;
+    }
 
     const data = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
@@ -186,8 +186,9 @@ const CreatePost = () => {
                   type="datetime-local"
                   className="form-control"
                   name="date_time"
-                  value={formData.date_time} //idk if this is correct format
+                  value={formData.date_time}
                   onChange={handleChange}
+                  min={minDateTime}
                 />
               </div>
               <div className="form-check mb-3">
