@@ -69,44 +69,46 @@ const Post = ({
 
   return (
     <div className="card mb-4 shadow-sm">
-      <div className="card-body position-relative">
-        {showOptions && (
-          <div className="dropdown position-absolute top-0 end-0 mt-1 me-2">
-            <button
-              className="btn btn-link text-muted"
-              type="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              &#8942;
-            </button>
-            <ul className="dropdown-menu dropdown-menu-end">
-              <li>
-                <button
-                  className="dropdown-item"
-                  onClick={() => onEdit && onEdit(post)}
-                >
-                  Edit
-                </button>
-              </li>
-              <li>
-                <button
-                  className="dropdown-item text-danger"
-                  onClick={handleDelete}
-                >
-                  Delete
-                </button>
-              </li>
-            </ul>
-          </div>
-        )}
+      <div className="card-body">
         <div className="d-flex justify-content-between align-items-center mb-2">
           <h5 className="card-title mb-0">{post.title}</h5>
-          <small className="text-muted">
-            {post.date_time
-              ? new Date(post.date_time).toLocaleString()
-              : new Date(post.created_at).toLocaleDateString()}
-          </small>
+          <div className="d-flex align-items-center">
+            <small className="text-muted me-2">
+              {post.date_time
+                ? new Date(post.date_time).toLocaleString()
+                : new Date(post.created_at).toLocaleDateString()}
+            </small>
+            {showOptions && (
+              <div className="dropdown">
+                <button
+                  className="btn btn-link text-muted p-0"
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  &#8942;
+                </button>
+                <ul className="dropdown-menu dropdown-menu-end">
+                  <li>
+                    <button
+                      className="dropdown-item"
+                      onClick={() => onEdit && onEdit(post)}
+                    >
+                      Edit
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      className="dropdown-item text-danger"
+                      onClick={handleDelete}
+                    >
+                      Delete
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            )}
+          </div>
         </div>
 
         <p className="card-text">{post.description}</p>

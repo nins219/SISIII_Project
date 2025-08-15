@@ -115,35 +115,38 @@ dataPool.updatePost = (post_id, user_id, postData) => {
   });
 };
 
-dataPool.deletePost = (post_id) => {
+dataPool.deletePost = (post_id, user_id) => {
   return new Promise((resolve, reject) => {
     conn.beginTransaction((err) => {
       if (err) return reject(err);
 
-      // Remove all related requests first to keep referential integrity
-      conn.query("DELETE FROM request WHERE post_id = ?", [post_id], (err) => {
-        if (err) {
-          return conn.rollback(() => reject(err));
-        }
-
-        // Delete the post itself
-        conn.query(
-          "DELETE FROM post WHERE post_id = ?",
-          [post_id],
-          (err, result) => {
-            if (err) {
-              return conn.rollback(() => reject(err));
-            }
-
-            conn.commit((err) => {
+      // Remove any reviews linked to the post to avoid foreign key conflicts
+      conn.query(
+        "DELETE FROM review WHERE to_post_id = ?",
+        [post_id],
+        (err) => {
+          if (err) {
+            return conn.rollback(() => reject(err));
+          }
+          // Delete the post; related requests will be removed via ON DELETE CASCADE
+          conn.query(
+            "DELETE FROM post WHERE post_id = ? AND user_id = ?",
+            [post_id, user_id],
+            (err, result) => {
               if (err) {
                 return conn.rollback(() => reject(err));
               }
-              resolve(result);
-            });
-          }
-        );
-      });
+
+              conn.commit((err) => {
+                if (err) {
+                  return conn.rollback(() => reject(err));
+                }
+                resolve(result);
+              });
+            }
+          );
+        }
+      );
     });
   });
 };
