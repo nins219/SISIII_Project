@@ -76,6 +76,14 @@ const Profile = () => {
     fetchReviews();
   }, [navigate]);
 
+  const handleEdit = (post) => {
+    navigate(`/editpost/${post.id}`, { state: { post } });
+  };
+
+  const handleDelete = (id) => {
+    setPosts((prev) => prev.filter((p) => p.id !== id));
+  };
+
   if (!user) {
     return (
       <div>
@@ -115,7 +123,13 @@ const Profile = () => {
               key={post.id}
               className="col-md-4 d-flex justify-content-center mb-4"
             >
-              <Post post={post} currentUserId={user.user_id} />
+              <Post
+                post={post}
+                currentUserId={user.user_id}
+                showOptions
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
             </div>
           ))}
         </div>

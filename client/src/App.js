@@ -8,6 +8,7 @@ import CreatePost from "./pages/CreatePost";
 import EditProfile from "./pages/EditProfile";
 import RequestNotification from "./pages/RequestNotification";
 import Review from "./pages/Review";
+import EditPost from "./pages/EditPost";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/editprofile" element={<EditProfile />} />
         <Route path="/user/:id" element={<RequestNotification />} />
         <Route path="/review/:postId" element={<Review />} />
+        <Route path="/editpost/:id" element={<EditPost />} />
       </Routes>
     </Router>
   );
