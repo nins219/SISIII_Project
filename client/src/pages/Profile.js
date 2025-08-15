@@ -73,6 +73,7 @@ const Profile = () => {
     fetchUser();
     fetchPosts();
     fetchRating();
+    fetchReviews();
   }, [navigate]);
 
   if (!user) {
